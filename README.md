@@ -13,13 +13,17 @@ $ npm install --save muse-json-generator
 ```
 
 ## Usage
+Create a new file named `playlist.js`
+
 ```js
 const generator = require('muse-json-generator');
-console.log(generator(477331181, 480097777));
+generator(477331181, 480097777).then(playlist => {
+	console.log(playlist);
+});
 ```
 
 ```bash
-node xxx.js > playlist.json
+node playlist.js > playlist.json
 ```
 
 ## API
@@ -29,7 +33,7 @@ const generator = require('muse-json-generator');
 ```
 ### generator(id, [id], [id], ...)
 
-**Returns a JSON string.**
+**Returns Promise.**
 
 
 ## License
