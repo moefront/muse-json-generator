@@ -1,6 +1,6 @@
 # muse-json-generator
 
-![npm](https://img.shields.io/npm/v/muse-json-generator.svg?style=flat)](https://www.npmjs.com/package/muse-json-generator)
+[![npm](https://img.shields.io/npm/v/muse-json-generator.svg?style=flat)](https://www.npmjs.com/package/muse-json-generator)
 ![built by](https://img.shields.io/badge/built_by-MoeFront-ff69b4.svg)
 
 Node.js JSON generator for the simple and diligent HTML5 audio player [MUSE](https://github.com/moefront/muse).
