@@ -22,6 +22,13 @@ console.log(generator(477331181, 480097777));
 node xxx.js > playlist.json
 ```
 
+## API
+
+### generator(id, [id], [id], ...)
+
+**Returns a JSON string.**
+
+
 ## License
 
 &copy; 2017 MoeFront Studio | The MIT License (MIT).
