@@ -36,6 +36,11 @@ const generator = require('muse-json-generator');
 **Returns Promise.**
 
 
+## Todo list
+
+ - [ ] Adjust translation
+
+
 ## License
 
 &copy; 2017 MoeFront Studio | The MIT License (MIT).
