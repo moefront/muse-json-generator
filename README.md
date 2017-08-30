@@ -24,6 +24,9 @@ node xxx.js > playlist.json
 
 ## API
 
+```js
+const generator = require('muse-json-generator');
+```
 ### generator(id, [id], [id], ...)
 
 **Returns a JSON string.**
