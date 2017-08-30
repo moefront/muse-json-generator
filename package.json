@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/moefront/muse-json-generator#readme",
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "honoka": "^0.3.4"
   },
   "devDependencies": {
