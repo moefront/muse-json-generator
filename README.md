@@ -36,7 +36,7 @@ $ muse 477331181 480097777
 $ muse 477331181,480097777
 ```
 
-This action would generator a `playlist.json` in your current working directory.
+This action would generate a `playlist.json` in your current working directory.
 
 ## API
 
