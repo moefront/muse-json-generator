@@ -1,6 +1,6 @@
 {
   "name": "muse-json-generator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "JSON generator for MUSE",
   "main": "lib/generator.js",
   "bin": {
@@ -45,6 +45,7 @@
     "trash-cli": "^1.4.0"
   },
   "files": [
-    "lib"
+    "lib",
+    "bin"
   ]
 }
