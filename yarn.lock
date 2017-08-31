@@ -1408,9 +1408,9 @@ home-or-tmp@^2.0.0:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.1"
 
-honoka@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.npmjs.org/honoka/-/honoka-0.3.4.tgz#c7c98fc96a042651eba8a71faea77582de5f0b10"
+honoka@^0.3.5:
+  version "0.3.5"
+  resolved "https://registry.npmjs.org/honoka/-/honoka-0.3.5.tgz#13355c00c3bb1f1d46bf8acf9d3a1078766594bd"
   dependencies:
     node-fetch "^1.7.2"
     whatwg-fetch "^2.0.3"

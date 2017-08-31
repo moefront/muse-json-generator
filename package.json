@@ -3,12 +3,16 @@
   "version": "1.0.2",
   "description": "JSON generator for MUSE",
   "main": "lib/generator.js",
+  "bin": {
+    "muse": "bin/muse.js",
+    "muse-json-generator": "bin/muse.js"
+  },
   "scripts": {
     "build": "npm run trash && babel src --out-dir lib",
     "test": "echo \"Error: no test specified\" && exit 1",
     "trash": "trash build stats lib",
     "watch": "babel src --watch --out-dir lib",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src ./bin"
   },
   "repository": {
     "type": "git",
@@ -26,7 +30,7 @@
   "homepage": "https://github.com/moefront/muse-json-generator#readme",
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "honoka": "^0.3.4"
+    "honoka": "^0.3.5"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

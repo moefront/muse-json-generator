@@ -6,13 +6,13 @@
 Node.js JSON generator for the simple and diligent HTML5 audio player [MUSE](https://github.com/moefront/muse).
 
 
-## Installation
+## Usage
 
+### with Node.js API
 ```bash
 $ npm install --save muse-json-generator
 ```
 
-## Usage
 Create a new file named `playlist.js`
 
 ```js
@@ -25,6 +25,18 @@ generator(477331181, 480097777).then(playlist => {
 ```bash
 node playlist.js > playlist.json
 ```
+
+### on CLI
+```bash
+$ npm install -g muse-json-generator
+```
+
+```bash
+$ muse 477331181 480097777
+$ muse 477331181,480097777
+```
+
+This action would generator a `playlisy.json` in your current working directory.
 
 ## API
 
@@ -39,6 +51,7 @@ const generator = require('muse-json-generator');
 ## Todo list
 
  - [ ] Adjust translation
+ - [ ] test
 
 
 ## License
