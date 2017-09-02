@@ -50,8 +50,8 @@ const generator = require('muse-json-generator');
 
 ## Todo list
 
- - [ ] Adjust translation
- - [ ] test
+ - [x] Adjust translation
+ - [x] test
 
 
 ## License

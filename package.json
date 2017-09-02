@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "npm run trash && babel src --out-dir lib",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --compilers js:babel-register --require babel-polyfill --timeout 30000 test/**/*.js && npm run lint",
     "trash": "trash build stats lib",
     "watch": "babel src --watch --out-dir lib",
     "lint": "eslint ./src ./bin"
@@ -42,6 +42,8 @@
     "babel-preset-env": "^1.6.0",
     "eslint": "^4.5.0",
     "eslint-config-kotori": "^0.1.3",
+    "mocha": "^3.5.0",
+    "power-assert": "^1.4.4",
     "trash-cli": "^1.4.0"
   },
   "files": [
