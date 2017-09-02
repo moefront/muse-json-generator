@@ -2,10 +2,12 @@
 /* eslint no-var: 0 */
 /* eslint prefer-arrow-callback: 0 */
 var fs = require('fs');
+var PrettyError = require('pretty-error');
 var generator = require('../lib/generator');
 var pkg = require('../package.json');
 
 var argv = process.argv.slice(2);
+var pe = new PrettyError();
 
 if (argv.length === 0) {
   console.log([pkg.name, pkg.version].join(' '));
@@ -21,6 +23,6 @@ if (argv.length === 0) {
       console.log('playlist.json generated successfully');
     })
     .catch(function(err) {
-      console.error(err);
+      console.log(pe.render(err));
     });
 }
