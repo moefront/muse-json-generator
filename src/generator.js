@@ -35,6 +35,9 @@ async function generator() {
     );
     songDetail = parseResponse(songDetail);
 
+    if (!songDetail.songs[0]) {
+      throw new Error(`song ID ${id} is not exist`);
+    }
     songDetail = songDetail.songs[0];
 
     item.title = songDetail.name;
