@@ -16,8 +16,7 @@ function parseResponse(response) {
 
 function joinArtists(artists) {
   let res = '';
-  for (let i = 0; i < artists.length; i++)
-  {
+  for (let i = 0; i < artists.length; i++) {
     res += artists[i].name + (i == artists.length - 1 ? '' : '/');
   }
   return res;
@@ -43,9 +42,10 @@ async function generator() {
     songDetail = songDetail.songs[0];
 
     item.title = songDetail.name;
-    item.artist = songDetail.artists.length > 1
-      ? joinArtists(songDetail.artists)
-      : songDetail.artists[0].name;
+    item.artist =
+      songDetail.artists.length > 1
+        ? joinArtists(songDetail.artists)
+        : songDetail.artists[0].name;
     item.cover = songDetail.album.picUrl;
     item.src = `https://api.kotori.love/netease/${id}.mp3`;
 
