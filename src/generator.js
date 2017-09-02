@@ -15,11 +15,7 @@ function parseResponse(response) {
 }
 
 function joinArtists(artists) {
-  let res = '';
-  for (let i = 0; i < artists.length; i++) {
-    res += artists[i].name + (i == artists.length - 1 ? '' : '/');
-  }
-  return res;
+  return artists.map(artist => artist.name).join('/');
 }
 
 async function generator() {
