@@ -1,5 +1,7 @@
 import honoka from 'honoka';
 
+honoka.defaults.baseURL = 'http://music.163.com/api';
+
 function parseResponse(response) {
   try {
     response = JSON.parse(response);
@@ -30,31 +32,37 @@ async function generator() {
       throw new Error('invalid song ID');
     }
     const item = {};
-    let songDetail = await honoka.get(
-      `http://music.163.com/api/song/detail/?id=${id}&ids=%5B${id}%5D`
-    );
-    songDetail = parseResponse(songDetail);
+    let songResponse = await honoka.get(`/song/detail/?id=${id}&ids=%5B${id}%5D`);
+    songResponse = parseResponse(songResponse);
 
-    if (!songDetail.songs[0]) {
+    if (!songResponse.songs[0]) {
       throw new Error(`song ID ${id} is not exist`);
     }
-    songDetail = songDetail.songs[0];
+    songResponse = songResponse.songs[0];
 
-    item.title = songDetail.name;
+    item.title = songResponse.name;
     item.artist =
-      songDetail.artists.length > 1
-        ? joinArtists(songDetail.artists)
-        : songDetail.artists[0].name;
-    item.cover = songDetail.album.picUrl;
+      songResponse.artists.length > 1
+        ? joinArtists(songResponse.artists)
+        : songResponse.artists[0].name;
+    item.cover = songResponse.album.picUrl;
     item.src = `https://api.kotori.love/netease/${id}.mp3`;
 
-    let lyricDetail = await honoka.get(
-      `http://music.163.com/api/song/lyric?os=pc&id=${id}&lv=-1&kv=-1&tv=-1`
-    );
-    lyricDetail = parseResponse(lyricDetail);
+    generator.options = generator.options || {};
+    if (generator.options.temporary) {
+      await honoka.get(item.src, {
+        redirect: 'manual'
+      });
+      item.src = honoka.response.headers.get('location');
+    }
 
-    item.lyric = lyricDetail.lrc.lyric;
-    item.translation = lyricDetail.tlyric.lyric;
+    let lyricResponse = await honoka.get(
+      `/song/lyric?os=pc&id=${id}&lv=-1&kv=-1&tv=-1`
+    );
+    lyricResponse = parseResponse(lyricResponse);
+
+    item.lyric = lyricResponse.lrc.lyric;
+    item.translation = lyricResponse.tlyric.lyric;
 
     ['lyric', 'translation'].forEach(key => {
       if (item[key] === null) {

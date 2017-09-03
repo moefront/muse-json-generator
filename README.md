@@ -35,6 +35,9 @@ $ npm install -g muse-json-generator
 ```bash
 $ muse 477331181 480097777
 $ muse 477331181,480097777
+
+$ muse 477331181 480097777 --temporary 
+# If you want a temporary link like /m([0-9].music.126.net)/, please provide this option.
 ```
 
 This action would generate a `playlist.json` in your current working directory.

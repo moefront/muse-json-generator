@@ -9,6 +9,14 @@ var pkg = require('../package.json');
 var argv = process.argv.slice(2);
 var pe = new PrettyError();
 
+const temporaryIndex = argv.indexOf('--temporary');
+if (temporaryIndex > -1) {
+  argv.splice(temporaryIndex, 1);
+  generator.options = {
+    temporary: true
+  };
+}
+
 if (argv.length === 0) {
   console.log([pkg.name, pkg.version].join(' '));
 } else {
