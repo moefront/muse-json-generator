@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /* eslint no-var: 0 */
 /* eslint prefer-arrow-callback: 0 */
+/* eslint strict: 0 */
+'use strict';
 var fs = require('fs');
 var PrettyError = require('pretty-error');
 var generator = require('../lib/generator');
@@ -9,7 +11,7 @@ var pkg = require('../package.json');
 var argv = process.argv.slice(2);
 var pe = new PrettyError();
 
-const temporaryIndex = argv.indexOf('--temporary');
+var temporaryIndex = argv.indexOf('--temporary');
 if (temporaryIndex > -1) {
   argv.splice(temporaryIndex, 1);
   generator.options = {
