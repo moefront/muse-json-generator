@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "6.1"
+  - 8
 
 cache:
   directories:
@@ -12,4 +12,4 @@ install:
   - yarn install
 
 script:
-  - npm test
+  - travis_retry npm test
