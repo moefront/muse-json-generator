@@ -51,6 +51,6 @@ describe('muse-json-generator', () => {
     };
     let playlist = await generator(26214326);
     playlist = JSON.parse(playlist);
-    assert.equal(true, /m([0-9]).music.126.net/.test(playlist[0].src));
+    assert.equal(true, /music.126.net/.test(playlist[0].src));
   });
 });
