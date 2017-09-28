@@ -1,4 +1,6 @@
 import assert from 'power-assert';
+import { URL } from 'url';
+import honoka from 'honoka';
 import generator from '../src/generator';
 
 describe('muse-json-generator', () => {
@@ -51,6 +53,18 @@ describe('muse-json-generator', () => {
     };
     let playlist = await generator(26214326);
     playlist = JSON.parse(playlist);
-    assert.equal(true, /music.126.net/.test(playlist[0].src));
+    const src = playlist[0].src;
+
+    assert.equal(true, /music.126.net/.test(src));
+
+    const srcURL = new URL(src);
+
+    if (/music.126.net/.test(srcURL.host)) {
+      await honoka.head(
+        `https://api.kotori.love/netease/${srcURL.host}${srcURL.pathname}`
+      );
+      assert.equal(200, honoka.response.status);
+      assert.equal('audio/mpeg', honoka.response.headers.get('Content-Type'));
+    }
   });
 });
