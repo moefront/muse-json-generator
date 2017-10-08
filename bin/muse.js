@@ -19,8 +19,14 @@ if (temporaryIndex > -1) {
   };
 }
 
+var stdoutIndex = argv.indexOf('--stdout');
+if (stdoutIndex > -1) {
+  argv.splice(stdoutIndex, 1);
+}
+
 if (argv.length === 0) {
   console.log([pkg.name, pkg.version].join(' '));
+  console.log('Usage: https://github.com/moefront/muse-json-generator');
 } else {
   if (argv.length === 1) {
     argv = argv[0].split(',');
@@ -29,8 +35,12 @@ if (argv.length === 0) {
   generator
     .apply(this, argv)
     .then(function(playlist) {
-      fs.writeFileSync('playlist.json', playlist);
-      console.log('playlist.json generated successfully');
+      if (stdoutIndex === -1) {
+        fs.writeFileSync('playlist.json', playlist);
+        console.log('playlist.json generated successfully');
+      } else {
+        console.log(playlist);
+      }
     })
     .catch(function(err) {
       console.log(pe.render(err));
