@@ -1,6 +1,6 @@
 {
   "name": "muse-json-generator",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "JSON generator for MUSE",
   "main": "lib/generator.js",
   "bin": {

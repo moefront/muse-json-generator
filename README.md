@@ -42,7 +42,7 @@ $ muse 477331181 480097777 --temporary
 
 This action would generate a `playlist.json` in your current working directory.
 
-** Try `--stdout` option to write playlist to stdout without generating a file.**
+**Try `--stdout` option to write playlist to stdout without generating a file.**
 
 ## API
 
