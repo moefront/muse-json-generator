@@ -20,14 +20,14 @@ function joinArtists(artists) {
   return artists.map(artist => artist.name).join('/');
 }
 
-async function generator() {
-  if (arguments.length === 0) {
+async function generator(...args) {
+  if (args.length === 0) {
     throw new Error('invalid input');
   }
 
   const result = [];
 
-  for (const id of Array.from(arguments)) {
+  for (const id of Array.from(args)) {
     if (!/^[0-9]*[1-9][0-9]*$/.test(id)) {
       throw new Error('invalid song ID');
     }
