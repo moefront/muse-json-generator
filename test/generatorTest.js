@@ -1,5 +1,7 @@
 import assert from 'power-assert';
+import { execSync } from 'child_process';
 import { URL } from 'url';
+import path from 'path';
 import honoka from 'honoka';
 import generator from '../src/generator';
 
@@ -66,5 +68,13 @@ describe('muse-json-generator', () => {
       assert.equal(200, honoka.response.status);
       assert.equal('audio/mpeg', honoka.response.headers.get('Content-Type'));
     }
+  });
+
+  it('stdout mode should work', async () => {
+    let playlist = execSync(
+      `node ${path.join(__dirname, '/../bin/muse.js')} 477331181 --stdout`
+    ).toString();
+    playlist = JSON.parse(playlist);
+    assert.equal(1, playlist.length);
   });
 });

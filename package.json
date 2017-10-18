@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "npm run trash && babel src --out-dir lib",
-    "test": "mocha --compilers js:babel-register --require babel-polyfill --timeout 30000 test/**/*.js && npm run lint",
+    "test": "npm run build && mocha --compilers js:babel-register --require babel-polyfill --timeout 30000 test/**/*.js && npm run lint",
     "trash": "trash lib",
     "watch": "babel src --watch --out-dir lib",
     "lint": "eslint ./src ./bin"
