@@ -1,8 +1,10 @@
 import honoka from 'honoka';
+import IMuseItem from './IMuseItem';
+import IGeneratorOptions from './IGeneratorOptions';
 
 honoka.defaults.baseURL = 'http://music.163.com/api';
 
-function parseResponse(response) {
+function parseResponse(response: any) {
   try {
     response = JSON.parse(response);
   } catch (e) {
@@ -10,29 +12,39 @@ function parseResponse(response) {
   }
 
   if (response.code !== 200) {
-    throw new Error('response code is not valid', response.code);
+    throw new Error('response code is not valid');
   }
 
   return response;
 }
 
-function joinArtists(artists) {
+function joinArtists(artists: Array<any>): string {
   return artists.map(artist => artist.name).join('/');
 }
 
-async function generator(...args) {
+async function generator(...args: Array<any>): Promise<string> {
   if (args.length === 0) {
     throw new Error('invalid input');
   }
 
-  const result = [];
+  let options: IGeneratorOptions = {} as any;
 
-  for (const id of Array.from(args)) {
+  const lastItem = args[args.length - 1];
+  if (typeof lastItem === 'object') {
+    options = lastItem;
+    args.pop();
+  }
+
+  const playlist: Array<IMuseItem> = [];
+
+  for (const id of args) {
     if (!/^[0-9]*[1-9][0-9]*$/.test(id)) {
       throw new Error('invalid song ID');
     }
-    const item = {};
-    let songResponse = await honoka.get(`/song/detail/?id=${id}&ids=%5B${id}%5D`);
+    const item: IMuseItem = {} as any;
+    let songResponse: any = await honoka.get(
+      `/song/detail/?id=${id}&ids=%5B${id}%5D`
+    );
     songResponse = parseResponse(songResponse);
 
     if (!songResponse.songs[0]) {
@@ -48,15 +60,14 @@ async function generator(...args) {
     item.cover = songResponse.album.picUrl;
     item.src = `https://api.kotori.love/netease/${id}.mp3`;
 
-    generator.options = generator.options || {};
-    if (generator.options.temporary) {
+    if (options.temporary) {
       await honoka.get(item.src, {
         redirect: 'manual'
       });
       item.src = honoka.response.headers.get('location');
     }
 
-    let lyricResponse = await honoka.get(
+    let lyricResponse: any = await honoka.get(
       `/song/lyric?os=pc&id=${id}&lv=-1&kv=-1&tv=-1`
     );
     lyricResponse = parseResponse(lyricResponse);
@@ -70,10 +81,10 @@ async function generator(...args) {
       }
     });
 
-    result.push(item);
+    playlist.push(item);
   }
 
-  return JSON.stringify(result, null, 2);
+  return JSON.stringify(playlist, null, 2);
 }
 
-export default generator;
+export = generator;

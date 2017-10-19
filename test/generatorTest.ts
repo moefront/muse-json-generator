@@ -1,19 +1,19 @@
-import assert from 'power-assert';
-import { execSync } from 'child_process';
+///<reference path="../node_modules/@types/node/index.d.ts"/>
+///<reference path="../node_modules/@types/mocha/index.d.ts"/>
+///<reference path="../node_modules/@types/power-assert/index.d.ts"/>
+
+import * as assert from 'power-assert';
+import * as cp from 'child_process';
 import { URL } from 'url';
-import path from 'path';
+import * as path from 'path';
 import honoka from 'honoka';
-import generator from '../src/generator';
+import * as generator from '../lib/generator';
 
 describe('muse-json-generator', () => {
-  beforeEach(() => {
-    generator.options = {};
-  });
-
   it('input a non-numberic value should throw error', async () => {
-    let err;
+    let err: any;
     try {
-      const playlist = await generator('niconiconi');
+      await generator('niconiconi');
     } catch (e) {
       err = e;
     }
@@ -50,10 +50,9 @@ describe('muse-json-generator', () => {
   });
 
   it('src should contain temporary link when user apply temporary mode', async () => {
-    generator.options = {
+    let playlist: any = await generator(26214326, {
       temporary: true
-    };
-    let playlist = await generator(26214326);
+    });
     playlist = JSON.parse(playlist);
     const src = playlist[0].src;
 
@@ -71,9 +70,11 @@ describe('muse-json-generator', () => {
   });
 
   it('stdout mode should work', async () => {
-    let playlist = execSync(
-      `node ${path.join(__dirname, '/../bin/muse.js')} 477331181 --stdout`
-    ).toString();
+    let playlist: any = cp
+      .execSync(
+        `node ${path.join(__dirname, '/../bin/muse.js')} 477331181 --stdout`
+      )
+      .toString();
     playlist = JSON.parse(playlist);
     assert.equal(1, playlist.length);
   });

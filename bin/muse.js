@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-/* eslint no-var: 0 */
-/* eslint prefer-arrow-callback: 0 */
-/* eslint strict: 0 */
 'use strict';
 var fs = require('fs');
 var PrettyError = require('pretty-error');
@@ -14,9 +11,6 @@ var pe = new PrettyError();
 var temporaryIndex = argv.indexOf('--temporary');
 if (temporaryIndex > -1) {
   argv.splice(temporaryIndex, 1);
-  generator.options = {
-    temporary: true
-  };
 }
 
 var stdoutIndex = argv.indexOf('--stdout');
@@ -30,6 +24,10 @@ if (argv.length === 0) {
 } else {
   if (argv.length === 1) {
     argv = argv[0].split(',');
+  }
+
+  if (temporaryIndex > -1) {
+    argv.push({ temporary: true });
   }
 
   generator
