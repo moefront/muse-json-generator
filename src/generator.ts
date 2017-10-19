@@ -1,8 +1,9 @@
 import honoka from 'honoka';
+import Config from './Config';
 import IMuseItem from './IMuseItem';
 import IGeneratorOptions from './IGeneratorOptions';
 
-honoka.defaults.baseURL = 'http://music.163.com/api';
+honoka.defaults.baseURL = Config.NeteaseBaseURL;
 
 function parseResponse(response: any) {
   try {
@@ -29,7 +30,7 @@ async function generator(...args: Array<any>): Promise<string> {
 
   let options: IGeneratorOptions = {} as any;
 
-  const lastItem = args[args.length - 1];
+  const lastItem: any = args[args.length - 1];
   if (typeof lastItem === 'object') {
     options = lastItem;
     args.pop();
@@ -58,7 +59,7 @@ async function generator(...args: Array<any>): Promise<string> {
         ? joinArtists(songResponse.artists)
         : songResponse.artists[0].name;
     item.cover = songResponse.album.picUrl;
-    item.src = `https://api.kotori.love/netease/${id}.mp3`;
+    item.src = `${Config.KotoriBaseURL}/netease/${id}.mp3`;
 
     if (options.temporary) {
       await honoka.get(item.src, {

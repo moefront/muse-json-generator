@@ -1,39 +1,43 @@
 #!/usr/bin/env node
 'use strict';
 var fs = require('fs');
+var yargs = require('yargs');
+var ora = require('ora');
 var PrettyError = require('pretty-error');
 var generator = require('../lib/generator');
 var pkg = require('../package.json');
 
-var argv = process.argv.slice(2);
 var pe = new PrettyError();
+var input = [];
 
-var temporaryIndex = argv.indexOf('--temporary');
-if (temporaryIndex > -1) {
-  argv.splice(temporaryIndex, 1);
-}
+var args = yargs(process.argv.slice(2))
+  .describe('temporary', 'temporary mode')
+  .describe('stdout', 'stdout mode')
+  .alias('t', 'temporary')
+  .alias('s', 'stdout').argv;
 
-var stdoutIndex = argv.indexOf('--stdout');
-if (stdoutIndex > -1) {
-  argv.splice(stdoutIndex, 1);
-}
-
-if (argv.length === 0) {
+if (args._.length === 0) {
   console.log([pkg.name, pkg.version].join(' '));
-  console.log('Usage: https://github.com/moefront/muse-json-generator');
+  console.log('Usage: ' + pkg.homepage);
 } else {
-  if (argv.length === 1) {
-    argv = argv[0].split(',');
+  if (args._.length === 1) {
+    input = args._[0].toString().split(',');
+  } else if (args._.length > 1) {
+    input = args._;
   }
 
-  if (temporaryIndex > -1) {
-    argv.push({ temporary: true });
+  if (args.temporary) {
+    input.push({ temporary: true });
   }
+
+  var spinner = ora('Fetching from Netease');
+  spinner.start();
 
   generator
-    .apply(this, argv)
+    .apply(this, input)
     .then(function(playlist) {
-      if (stdoutIndex === -1) {
+      spinner.stop();
+      if (!args.stdout) {
         fs.writeFileSync('playlist.json', playlist);
         console.log('playlist.json generated successfully');
       } else {
@@ -41,6 +45,7 @@ if (argv.length === 0) {
       }
     })
     .catch(function(err) {
+      spinner.stop();
       console.log(pe.render(err));
     });
 }
