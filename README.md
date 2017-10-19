@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/muse-json-generator.svg?style=flat)](https://www.npmjs.com/package/muse-json-generator)
 [![Build Status](https://travis-ci.org/moefront/muse-json-generator.svg?branch=master)](https://travis-ci.org/moefront/muse-json-generator)
+[![Coverage Status](https://coveralls.io/repos/github/moefront/muse-json-generator/badge.svg?branch=master)](https://coveralls.io/github/moefront/muse-json-generator?branch=master)
 ![built by](https://img.shields.io/badge/built_by-MoeFront-ff69b4.svg)
 
 Node.js JSON generator for the simple and diligent HTML5 audio player [MUSE](https://github.com/moefront/muse).

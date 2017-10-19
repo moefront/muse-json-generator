@@ -14,7 +14,7 @@
     "test": "mocha --compilers ts:ts-node/register --timeout 30000 test/**/*.ts",
     "trash": "trash lib",
     "watch": "tsc -watch -p ./",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "@types/mocha": "^2.2.43",
     "@types/node": "^8.0.44",
     "@types/power-assert": "^1.4.29",
+    "coveralls": "^3.0.0",
     "mocha": "^3.5.0",
     "power-assert": "^1.4.4",
     "trash-cli": "^1.4.0",
