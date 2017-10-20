@@ -1,17 +1,25 @@
 ///<reference path="../node_modules/@types/node/index.d.ts"/>
 ///<reference path="../node_modules/@types/mocha/index.d.ts"/>
 ///<reference path="../node_modules/@types/power-assert/index.d.ts"/>
+///<reference path="../node_modules/@types/nock/index.d.ts"/>
 
 import * as assert from 'power-assert';
 import * as cp from 'child_process';
 import { URL } from 'url';
 import * as path from 'path';
 import honoka from 'honoka';
-import * as generator from '../lib/generator';
+import * as nock from 'nock';
+import generator = require('../src/generator');
 
 const BIN_PATH = `node ${path.join(__dirname, '/../bin/muse.js')}`;
 const ORIGINAL_REGEX = /music.126.net/;
-const TEST_SONGS = [477331181, 480097777, 26214326];
+const TEST_SONGS = [
+  477331181, // normal
+  480097777, // normal
+  26214326, // multiple artists
+  404, // not found
+  1818227 // without lyric
+];
 const PLAYLIST_KEYS = [
   'title',
   'artist',
@@ -21,7 +29,11 @@ const PLAYLIST_KEYS = [
   'translation'
 ];
 
-describe('muse-json-generator', () => {
+describe('generator function test', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
   it('input a non-numberic value should throw error', async () => {
     let err: any;
     try {
@@ -35,14 +47,14 @@ describe('muse-json-generator', () => {
   });
 
   it('input two song ID should output an array contained two objects', async () => {
-    let playlist = await generator(TEST_SONGS[0], TEST_SONGS[1]);
+    let playlist: any = await generator(TEST_SONGS[0], TEST_SONGS[1]);
     playlist = JSON.parse(playlist);
     assert.equal(true, Array.isArray(playlist));
     assert.equal(2, playlist.length);
   });
 
   it('output should contain specified keys', async () => {
-    let playlist = await generator(TEST_SONGS[0]);
+    let playlist: any = await generator(TEST_SONGS[0]);
     playlist = JSON.parse(playlist);
     PLAYLIST_KEYS.forEach(key => {
       assert.equal(
@@ -53,7 +65,7 @@ describe('muse-json-generator', () => {
   });
 
   it('artists should be divided with / when a song has more than one artist', async () => {
-    let playlist = await generator(TEST_SONGS[2]);
+    let playlist: any = await generator(TEST_SONGS[2]);
     playlist = JSON.parse(playlist);
     assert.equal(
       true,
@@ -81,6 +93,72 @@ describe('muse-json-generator', () => {
     }
   });
 
+  it('lyric should be undefined when a song has not lyric', async () => {
+    let playlist: any = await generator(TEST_SONGS[4]);
+    playlist = JSON.parse(playlist);
+    assert.equal('undefined', typeof playlist[0].lyric);
+  });
+
+  it('should throw error when input is empty', async () => {
+    let err: any;
+    try {
+      await generator();
+    } catch (e) {
+      err = e;
+    }
+    assert.throws(() => {
+      throw err;
+    }, /invalid input/);
+  });
+
+  it('should throw error when song is not found', async () => {
+    let err: any;
+    try {
+      await generator(TEST_SONGS[3]);
+    } catch (e) {
+      err = e;
+    }
+    assert.throws(() => {
+      throw err;
+    }, `song ID ${TEST_SONGS[3]} is not exist`);
+  });
+
+  it('should throw error when response is not valid', async () => {
+    nock(/(.*)/)
+      .get(/(.*)/)
+      .query(() => true)
+      .reply(200, '{');
+
+    let err: any;
+    try {
+      await generator(TEST_SONGS[0]);
+    } catch (e) {
+      err = e;
+    }
+    assert.throws(() => {
+      throw err;
+    }, /response is not a valid json string/);
+  });
+
+  it("should throw error when response's code is not 200", async () => {
+    nock(/(.*)/)
+      .get(/(.*)/)
+      .query(() => true)
+      .reply(200, '{"code":400}');
+
+    let err: any;
+    try {
+      await generator(TEST_SONGS[0]);
+    } catch (e) {
+      err = e;
+    }
+    assert.throws(() => {
+      throw err;
+    }, /response code is not valid/);
+  });
+});
+
+describe('generator cli test', () => {
   it('stdout mode should work', () => {
     let playlist: any = cp
       .execSync(`${BIN_PATH} ${TEST_SONGS[0]} --stdout`)

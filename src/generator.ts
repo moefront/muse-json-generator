@@ -1,4 +1,5 @@
 import honoka from 'honoka';
+import * as _ from 'lodash';
 import Config from './Config';
 import IMuseItem from './IMuseItem';
 import IGeneratorOptions from './IGeneratorOptions';
@@ -73,14 +74,8 @@ async function generator(...args: Array<any>): Promise<string> {
     );
     lyricResponse = parseResponse(lyricResponse);
 
-    item.lyric = lyricResponse.lrc.lyric;
-    item.translation = lyricResponse.tlyric.lyric;
-
-    ['lyric', 'translation'].forEach(key => {
-      if (item[key] === null) {
-        delete item[key];
-      }
-    });
+    item.lyric = _.get(lyricResponse, 'lrc.lyric');
+    item.translation = _.get(lyricResponse, 'tlyric.lyric');
 
     playlist.push(item);
   }
