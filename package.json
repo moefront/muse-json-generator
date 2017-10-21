@@ -33,7 +33,9 @@
   "homepage": "https://github.com/moefront/muse-json-generator#readme",
   "dependencies": {
     "chalk": "^2.2.0",
+    "get-proxy": "^2.1.0",
     "honoka": "^0.4.4",
+    "https-proxy-agent": "^2.1.0",
     "lodash": "^4.17.4",
     "ora": "^1.3.0",
     "pjson": "^1.0.9",
