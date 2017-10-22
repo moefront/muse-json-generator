@@ -1,32 +1,17 @@
 import honoka from 'honoka';
-import * as ProxyAgent from 'https-proxy-agent';
-import * as getProxy from 'get-proxy';
 import * as _ from 'lodash';
 import Config from './Config';
 import IMuseItem from './IMuseItem';
 import IGeneratorOptions from './IGeneratorOptions';
+import registerHonoka from './registerHonoka';
 
 export default class MuseGenerator {
   private args: Array<any>;
   private options: IGeneratorOptions = [] as any;
 
   public constructor(...args: Array<any>) {
-    this.registerHonoka();
+    registerHonoka();
     this.args = this.parseInput(args);
-  }
-
-  private registerHonoka(): void {
-    const sysProxy = getProxy();
-
-    honoka.defaults.baseURL = Config.NeteaseBaseURL;
-    honoka.interceptors.register({
-      request: (options: any) => {
-        if (sysProxy) {
-          options.agent = new ProxyAgent(sysProxy);
-        }
-        return options;
-      }
-    });
   }
 
   private parseInput(args: Array<any>): Array<any> {

@@ -1,49 +1,64 @@
 import * as fs from 'fs';
-import yargs from 'yargs';
+import * as program from 'commander';
 import * as ora from 'ora';
 import chalk from 'chalk';
 import * as PrettyError from 'pretty-error';
-import generator = require('./generator');
 import * as pkg from 'pjson';
+import * as semver from 'semver';
+import honoka from 'honoka';
+import generator = require('./generator');
+import Config from './Config';
+import registerHonoka from './registerHonoka';
 
 export = class MuseGeneratorCli {
   private pe: PrettyError;
-  private spinner: any;
+  private spinners: any;
 
   public constructor() {
+    registerHonoka();
     this.pe = new PrettyError();
-    this.spinner = ora('Fetching from Netease');
+    this.spinners = {
+      update: ora('Checking for Updates'),
+      fetching: ora('Fetching from Netease')
+    };
   }
 
   public start(): void {
     let input: Array<any> = [];
 
-    const args = yargs(process.argv.slice(2))
-      .describe('temporary', 'temporary mode')
-      .describe('stdout', 'stdout mode')
-      .alias('t', 'temporary')
-      .alias('s', 'stdout').argv;
+    program
+      .version(pkg.version)
+      .option('-c, --check', 'check for updates')
+      .option('-t, --temporary', 'temporary mode')
+      .option('-s, --stdout', 'stdout mode')
+      .parse(process.argv);
 
-    if (args._.length === 0) {
-      console.log(chalk.bold.green([pkg.name, pkg.version].join(' ')));
-      console.log(`Usage: ${chalk.underline(pkg.homepage)}`);
+    if (program.check) {
+      this.checkUpdate().catch(() => {
+        this.spinners.update.stop();
+      });
+      return;
+    }
+
+    if (program.args.length === 0) {
+      program.outputHelp();
     } else {
-      if (args._.length === 1) {
-        input = args._[0].toString().split(',');
-      } else if (args._.length > 1) {
-        input = args._;
+      if (program.args.length === 1) {
+        input = program.args[0].toString().split(',');
+      } else if (program.args.length > 1) {
+        input = program.args;
       }
 
-      if (args.temporary) {
+      if (program.temporary) {
         input.push({ temporary: true });
       }
 
-      this.spinner.start();
+      this.spinners.fetching.start();
 
       generator(...input)
         .then((playlist: string) => {
-          this.spinner.stop();
-          if (!args.stdout) {
+          this.spinners.fetching.stop();
+          if (!program.stdout) {
             fs.writeFileSync('playlist.json', playlist);
             console.log(
               chalk.bold.green('playlist.json generated successfully')
@@ -53,9 +68,33 @@ export = class MuseGeneratorCli {
           }
         })
         .catch((err: Error) => {
-          this.spinner.stop();
+          this.spinners.fetching.stop();
           console.log(this.pe.render(err));
         });
+    }
+  }
+
+  private async checkUpdate(): Promise<void> {
+    this.spinners.update.start();
+    let latestPkg: any = await honoka.get(Config.PackageURL);
+    this.spinners.update.stop();
+    latestPkg = JSON.parse(latestPkg);
+    const latestVersion = latestPkg.version;
+    const currentVersion = pkg.version;
+    if (!semver.valid(latestVersion)) {
+      return;
+    }
+
+    if (semver.gt(latestVersion, currentVersion)) {
+      console.log(
+        chalk.bold.red(
+          `Your current version of ${pkg.name} is out of date. The latest version is ${latestVersion} while you're on ${currentVersion}.`
+        )
+      );
+    } else {
+      console.log(
+        chalk.bold.green(`You're on latest version ${currentVersion}`)
+      );
     }
   }
 };

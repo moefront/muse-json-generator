@@ -5,5 +5,4 @@ export default interface IMuseItem {
   src: string | null;
   lyric: string;
   translation: string;
-  [key: string]: any;
 };
