@@ -1,4 +1,4 @@
-import honoka from 'honoka';
+import honoka, { HonokaRequestOptions } from 'honoka';
 import * as ProxyAgent from 'https-proxy-agent';
 import * as getProxy from 'get-proxy';
 import Config from './Config';
@@ -14,7 +14,7 @@ export default function registerHonoka(): void {
 
   honoka.defaults.baseURL = Config.NeteaseBaseURL;
   honoka.interceptors.register({
-    request: (options: any) => {
+    request: (options: HonokaRequestOptions) => {
       if (sysProxy) {
         options.agent = new ProxyAgent(sysProxy);
       }
