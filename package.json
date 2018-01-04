@@ -7,6 +7,7 @@
     "muse": "bin/muse.js",
     "muse-json-generator": "bin/muse.js"
   },
+  "typings": "lib/generator.d.ts",
   "scripts": {
     "start": "npm run watch",
     "build": "npm run trash && tsc -p ./",
