@@ -69,7 +69,9 @@ export default class MuseGenerator {
         songResponse.artists.length > 1
           ? this.joinArtists(songResponse.artists)
           : songResponse.artists[0].name;
-      item.cover = songResponse.album.picUrl;
+      item.cover = songResponse.album.picUrl
+        .replace('http://', '//')
+        .replace('https://', '//');
       item.src = `${Config.KotoriBaseURL}/netease/${id}.mp3`;
 
       if (this.options.temporary) {
