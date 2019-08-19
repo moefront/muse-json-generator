@@ -87,10 +87,10 @@ describe('generator function test', () => {
     }
   });
 
-  it('lyric should be undefined when a song has not lyric', async () => {
+  it('lyric should be empty when a song has not lyric (muse will handle it normally)', async () => {
     let playlist: any = await generator(TEST_SONGS[4]);
     playlist = JSON.parse(playlist);
-    expect(typeof playlist[0].lyric).to.be.equal('undefined');
+    expect(playlist[0].lyric).to.be.equal('');
   });
 
   it('should throw error when input is empty', () => {
