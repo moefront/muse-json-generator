@@ -19,20 +19,13 @@ const expect = chai.expect;
 const BIN_PATH = `node ${path.join(__dirname, '/../bin/muse.js')}`;
 const ORIGINAL_REGEX = /music.126.net/;
 const TEST_SONGS = [
-  477331181, // normal
-  480097777, // normal
-  26214326, // multiple artists
+  1333128434, // normal
+  541687281, // normal
+  165340, // multiple artists
   404, // not found
-  1818227 // without lyric
+  857896 // without lyric
 ];
-const PLAYLIST_KEYS = [
-  'title',
-  'artist',
-  'cover',
-  'src',
-  'lyric',
-  'translation'
-];
+const PLAYLIST_KEYS = ['title', 'artist', 'cover', 'src', 'lyric'];
 
 describe('generator function test', () => {
   afterEach(() => {
@@ -90,7 +83,7 @@ describe('generator function test', () => {
   it('lyric should be empty when a song has not lyric (muse will handle it normally)', async () => {
     let playlist: any = await generator(TEST_SONGS[4]);
     playlist = JSON.parse(playlist);
-    expect(playlist[0].lyric).to.be.equal('');
+    expect(playlist[0].lyric).to.be.oneOf(['', undefined]);
   });
 
   it('should throw error when input is empty', () => {

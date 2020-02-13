@@ -66,4 +66,4 @@ const generator = require('muse-json-generator');
 
 ## License
 
-&copy; 2017 MoeFront Studio | The MIT License (MIT).
+&copy; 2017-2020 MoeFront Studio | The MIT License (MIT).
